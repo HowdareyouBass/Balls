@@ -24,24 +24,24 @@ namespace WpfApp1
     {
         TheBall ball = new TheBall();
         Stopwatch stopWatch = new Stopwatch();
-        int framecounter;
+        bool Collision = false;
         public MainWindow()
         {
             InitializeComponent();
             Stopwatch stopWatch = new Stopwatch();
             DrawBall(104,104);
             DrawBorder();
+            TimeSpan s = new TimeSpan(0, 0, 0, 0, 0);
+            stopWatch.Start();
+            DrawFrame(s);
+            stopWatch.Stop();
             CompositionTarget.Rendering += UpdateFrame;
         }
 
         protected void UpdateFrame(object sender, EventArgs e)
         {
-            if(framecounter == 0)
-            {
-                stopWatch.Start();
-            }
-            long framerate = (long)(framecounter / this.stopWatch.Elapsed.TotalSeconds);
             DrawFrame(stopWatch.Elapsed);
+            stopWatch.Restart();
         }
 
         private void DrawBall(double X1,double Y1)
@@ -73,10 +73,13 @@ namespace WpfApp1
             DrawBorder();
             SetPoints();
             CheckCollision();
-            ball.velocity = Vector.Add(Vector.Multiply(tsa.TotalSeconds, ball.acceleration), ball.velocity);
+            if (Collision == false)
+            {
+                ball.velocity = Vector.Add(Vector.Multiply(tsa.TotalSeconds, ball.acceleration), ball.velocity);
+            }
             ball.position = Vector.Add(Vector.Multiply(tsa.TotalSeconds, ball.velocity), ball.position);
             DrawBall(ball.position.X, ball.position.Y);
-            DrawVectors();
+//            DrawVectors();
         }
         private void SetPoints()
         {
@@ -90,11 +93,16 @@ namespace WpfApp1
             if(ball.leftPoint.X < 8 || ball.rightPoint.X > Field.Width - 8)
             {
                 ball.velocity = new Vector(-ball.velocity.X, ball.velocity.Y);
+                Collision = true;
+                return;
             }
             if(ball.bottomPoint.Y > Field.Height - 8 || ball.topPoint.Y < 8)
             {
                 ball.velocity = new Vector(ball.velocity.X, -ball.velocity.Y);
+                Collision = true;
+                return;
             }
+            Collision = false;
         }
         private void DrawVectors()
         {
@@ -116,6 +124,11 @@ namespace WpfApp1
             };
             Field.Children.Add(acc);
             Field.Children.Add(vel);
+        }
+
+        private void Field_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+
         }
     }
 }

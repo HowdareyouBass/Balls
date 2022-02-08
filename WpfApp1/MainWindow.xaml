@@ -8,7 +8,7 @@
         Title="MainWindow" Height="473.137" Width="953.856" Background="#FF3A3A3A" WindowStartupLocation="CenterScreen">
     <Grid>
         <Button Content="Start" Margin="0,0,10,10" Background="#FF616161" Foreground="#FFD6D6D6" FontFamily="Segoe UI Black" FontSize="16" Height="42" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="97"/>
-        <Canvas Name="Field" Margin="10,10,112,10" Width="824" Height="422"/>
+        <Canvas Name="Field" Margin="10,10,112,10" Width="824" Height="422" MouseDown="Field_MouseDown"/>
 
     </Grid>
 </Window>
